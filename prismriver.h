@@ -9,14 +9,14 @@ static const ulong SAMPLE_RATE	= 44100;
 typedef struct
 {
 	sample l, r;
-} STuple;
+} Stuple;
 
 /** PCM API **/
 
 typedef struct
 {
 	ulong size;
-	STuple *data;
+	Stuple *data;
 } Buffer;
 
 Buffer*	createbuffer(ulong size);
@@ -29,15 +29,16 @@ void play(Buffer *buf, int fd);
 
 typedef struct Wavegen
 {
-	STuple	(*fn)(struct Wavegen*, ulong);
+	Stuple	(*fn)(struct Wavegen*, double, ulong);
 	void	(*destroy)(struct Wavegen*);
 } Wavegen;
 
 void destroywavegen(Wavegen *gen);
 
-Buffer*	buffermap(Buffer *buf, Wavegen *gen, int d, ulong s, ulong sz);
+Buffer*	buffermap(Buffer *buf, Wavegen *gen, double freq, ulong *clock, int d, ulong s, ulong sz);
 
-Wavegen* waveform(double (*fn)(double), double amp, double freq, double φ);
+Wavegen* waveform(double (*fn)(double), double amp, double φ);
+Wavegen* pcm(Buffer *buf);
 
 double sine(double);
 double saw(double);

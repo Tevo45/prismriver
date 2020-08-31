@@ -12,14 +12,14 @@ createbuffer(ulong s)
 	 */
 	Buffer *b = emallocz(sizeof(Buffer));
 	b->size = s;
-	b->data = emallocz(s * sizeof(STuple));
+	b->data = emallocz(s * sizeof(Stuple));
 	return b;
 }
 
 Buffer*
 resizebuffer(Buffer *b, ulong ns)
 {
-	b->data = erealloc(b->data, ns * sizeof(STuple));
+	b->data = erealloc(b->data, ns * sizeof(Stuple));
 	b->size = ns;
 	return b;
 }
@@ -34,5 +34,5 @@ destroybuffer(Buffer *b)
 void
 play(Buffer *b, int fd)
 {
-	write(fd, b->data, b->size * sizeof(STuple));
+	write(fd, b->data, b->size * sizeof(Stuple));
 }
