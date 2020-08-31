@@ -1,0 +1,15 @@
+</$objtype/mkfile
+
+OBJ=main.$O
+
+$O.out: $OBJ
+	$LD $OBJ
+
+%.$O: %.c
+	$CC $CFLAGS $stem.c
+
+clean:V:
+	rm -f [$OS].out *.[$OS]
+
+run:V: $O.out
+	$O.out
