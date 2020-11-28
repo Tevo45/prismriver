@@ -1,9 +1,9 @@
 #pragma lib "libprismriver.a"
 
-typedef short sample;
+typedef double sample;
 
-static const ulong SAMPLE_MAX	= 32767;
-static const ulong SAMPLE_MIN	= -32768;
+static const ulong SAMPLE_MAX	= 1;
+static const ulong SAMPLE_MIN	= -1;
 static const ulong SAMPLE_RATE	= 44100;
 
 typedef struct
@@ -37,8 +37,10 @@ void destroywavegen(Wavegen *gen);
 
 Buffer*	buffermap(Buffer *buf, Wavegen *gen, double freq, ulong *clock, int d, ulong s, ulong sz);
 
-Wavegen* waveform(double (*fn)(double), double amp, double φ);
+Wavegen* waveform(double (*fn)(double), double amp, double phase);
 Wavegen* pcm(Buffer *buf);
+
+Wavegen* unison(Wavegen *gen, uint voices, double pitchvar, double phasevar);
 
 double sine(double);
 double saw(double);

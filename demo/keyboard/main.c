@@ -50,7 +50,7 @@ main(int argc, char** argv)
 	initdraw(nil, nil, "Prismsynth");
 	einit(Ekeyboard);
 
-	w = waveform(sine, 1.0, 0);
+	w = unison(waveform(sine, 1.0, 0), 7, 0.5, 0.3);
 
 	while(cont)
 		switch(e = ekbd())
@@ -70,6 +70,7 @@ main(int argc, char** argv)
 			}
 		}
 
+	destroywavegen(w);
 	close(out);
 	exits(0);
 }

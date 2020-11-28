@@ -126,3 +126,49 @@ pcm(Buffer *buf)
 	p->buf		= buf;
 	return p;
 }
+
+/** Unison **/
+
+typedef struct
+{
+	Wavegen;
+	Wavegen *gen;
+	uint voices;
+	double pitchΔ, phaseΔ;
+} Unisonprops;
+
+Stuple
+unisonfn(Wavegen *w, double freq, ulong t)
+{
+	Unisonprops *p = (Unisonprops*)w;
+	Stuple ret = (Stuple) { 0, 0 };
+	int voices = p->voices;
+	for(int c = 0; c < voices; c++)
+	{
+		Stuple r = p->gen->fn(p->gen, freq * p->pitchΔ * c, t);
+		ret.l += r.l/voices;
+		ret.r += r.r/voices;
+	}
+	return ret; 
+}
+
+void
+unisoncleanup(Wavegen *w)
+{
+	Unisonprops *p = (Unisonprops*)w;
+	destroywavegen(p->gen);
+	free(p);
+}
+
+Wavegen*
+unison(Wavegen *gen, uint voices, double pitchvar, double phasevar)
+{
+	Unisonprops *p = emallocz(sizeof(*p));
+	p->fn		= unisonfn;
+	p->destroy	= unisoncleanup;
+	p->gen		= gen;
+	p->voices	= voices;
+	p->pitchΔ	= pitchvar;
+	p->phaseΔ	= phasevar;
+	return p;
+}
